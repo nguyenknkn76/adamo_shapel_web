@@ -16,4 +16,9 @@ class Voucher extends Model
         "conditions",
         "quantity",
     ];
+
+    public function orderDetails()
+    {
+        return $this->hasMany(OrderDetail::class);
+    }
 }
