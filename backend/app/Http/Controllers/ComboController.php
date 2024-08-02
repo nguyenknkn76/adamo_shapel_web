@@ -6,6 +6,12 @@ use Illuminate\Http\Request;
 
 class ComboController extends Controller
 {
+    public function getByRestaurantId($restaurant_id)
+    {
+        $combos = Combo::where('restaurant_id',$restaurant_id)->get();
+        return response()->json($combos);
+    }
+    
     public function index()
     {
         return Combo::with('restaurant')->get();

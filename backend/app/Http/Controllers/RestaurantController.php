@@ -3,12 +3,55 @@ namespace App\Http\Controllers;
 
 use App\Models\Restaurant;
 use Illuminate\Http\Request;
+use Illuminate\Log\Logger;
 
 class RestaurantController extends Controller
 {
-    public function index()
+    public function getByCity($city_id)
     {
-        return Restaurant::all();
+        $restaurants = Restaurant::where('city_id', $city_id)->with(['city', 'restaurant_category'])->get();
+        return response()->json($restaurants);
+    }
+
+    public function getByCategory($category_id)
+    {
+        $restaurants = Restaurant::where('restaurant_category_id', $category_id)->with(['city', 'restaurant_category'])->get();
+        return response()->json($restaurants);
+    }
+
+    public function getByCityAndCategory(Request $request)
+    {   
+        $city_id = $request->route('city_id');
+        // $validatedData = $request->validate([
+        //     'city_id' => 'required|exists:cities,id',
+        //     'restaurant_category_id' => 'required|exists:restaurant_categories,id',
+        // ]);
+
+        // $restaurants = Restaurant::where('city_id', $validatedData['city_id'])
+        //     ->where('restaurant_category_id', $validatedData['restaurant_category_id'])
+        //     ->with(['city', 'restaurant_category'])
+        //     ->get();
+
+        return response()->json($city_id);
+    }
+
+    public function index(Request $request)
+    {
+        $query = Restaurant::query();
+
+        if ($request->has('city_id')) {
+            $query->where('city_id', $request->input('city_id'));
+        }
+
+        if ($request->has('restaurant_category_id')) {
+            $query->where('restaurant_category_id', $request->input('restaurant_category_id'));
+        }
+
+        $restaurants = $query->with(['city', 'restaurant_category'])->get();
+
+        return response()->json($restaurants);
+        // return Restaurant::all();
+        // return Restaurant::with(['city','restaurant_category'])->get();
     }
 
     public function store(Request $request)
@@ -22,10 +65,13 @@ class RestaurantController extends Controller
             'open_time' => 'required',
             'close_time' => 'required',
             'rating' => 'nullable|numeric|min:0|max:5',
+            'city_id' => 'required|exists:cities,id',
+            'restaurant_category_id' => 'sometimes|required|exists:restaurant_categories,id'
         ]);
 
         $restaurant = Restaurant::create($validatedData);
 
+        
         return response()->json($restaurant, 201);
     }
 
@@ -46,11 +92,12 @@ class RestaurantController extends Controller
             'image_url' => 'nullable|string',
             'open_time' => 'sometimes|required',
             'close_time' => 'sometimes|required',
+            'city_id' => 'sometimes|exists:cities,id',
+            'restaurant_category_id' => 'required|exists:restaurant_categories,id',
             'rating' => 'nullable|numeric|min:0|max:5',
         ]);
 
         $restaurant->update($validatedData);
-
         return response()->json($restaurant, 200);
     }
 

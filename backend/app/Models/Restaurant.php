@@ -15,16 +15,24 @@ class Restaurant extends Model
         'name',
         'address',
         'phone_number',
-        'description', 
-        'image_url', 
-        'open_time', 
-        'close_time', 
+        'description',
+        'image_url',
+        'open_time',
+        'close_time',
         'rating',
+        'city_id',
+        'restaurant_category_id'
     ];
 
-    protected $hidden = [
+    public function restaurant_category()
+    {
+        return $this->belongsTo(RestaurantCategory::class, 'restaurant_category_id');
+    }
 
-    ];
+    public function city()
+    {
+        return $this->belongsTo(City::class);
+    }
 
     public function dishes()
     {
@@ -40,4 +48,6 @@ class Restaurant extends Model
     {
         return $this->hasMany(Order::class);
     }
+
+    
 }

@@ -15,6 +15,14 @@ use App\Http\Controllers\CartDetailController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\OrderDetailController;
+use App\Http\Controllers\CityController;
+use App\Http\Controllers\RestaurantCategoryController;
+use App\Models\Dish;
+use App\Models\Restaurant;
+
+Route::apiResource('restaurant_categories', RestaurantCategoryController::class);
+
+Route::apiResource('cities', CityController::class);
 
 Route::apiResource('order-details', OrderDetailController::class);
 
@@ -29,14 +37,26 @@ Route::apiResource('carts', CartController::class);
 Route::apiResource('combo-details', ComboDetailController::class);
 
 Route::apiResource('combos', ComboController::class);
+//* API to get combos after choosed restaurant 
+//* sample api: GET http://localhost:8000/api/combos/restaurant_id/3
+Route::get('combos/restaurant_id/{restaurant_id}', [ComboController::class, 'getByRestaurantId']);
 
 Route::apiResource('dishes', DishController::class);
+//* API to get dishes after choosed restaurant 
+//* sample api: GET http://localhost:8000/api/dishes/restaurant_id/3
+Route::get('dishes/restaurant_id/{restaurant_id}', [DishController::class, 'getByRestaurantId']);
 
 Route::apiResource('vouchers', VoucherController::class);
 
 Route::apiResource('categories', CategoryController::class);
 
 Route::apiResource('restaurants', RestaurantController::class);
+
+//* API to get restaurents by (2 prams) city_id and restaurant_category_id 
+//* sample api: GET http://localhost:8000/api/restaurants?city_id=4&restaurant_category_id=4 
+Route::get('restaurants/filter', [RestaurantController::class, 'getByCityAndCategory']);
+Route::get('restaurants/city/{city_id}', [RestaurantController::class, 'getByCity']);
+Route::get('restaurants/category/{category_id}', [RestaurantController::class, 'getByCategory']);
 
 Route::apiResource('users', UserController::class);
 

@@ -5,7 +5,13 @@ use App\Models\Dish;
 use Illuminate\Http\Request;
 
 class DishController extends Controller
-{
+{   
+    public function getByRestaurantId($restaurant_id)
+    {
+        $dishes = Dish::where('restaurant_id',$restaurant_id)->with(['category'])->get();
+        return response()->json($dishes);
+    }
+
     public function index()
     {
         return Dish::with(['restaurant', 'category'])->get();

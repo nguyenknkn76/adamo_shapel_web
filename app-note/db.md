@@ -1,7 +1,11 @@
 # this is note for be
 <!-- db object -->
-***Online Food Ordering System ***
-`Tables`
+- ***Online Food Ordering System ***
+  - `Tables`
+`Cities`
+   id (Primary key)
+   name
+
 <!-- `Users`
     id (Primary Key)
     name
@@ -20,7 +24,9 @@
     image_url
     open_time
     close_time
-    rating -->
+    rating 
+    city_id (Foreign key referencing cities) 
+-->
 
 <!-- `Categories`
     id (Primary Key)
@@ -80,7 +86,7 @@
   -->
 
 
-`OrderDetails`
+<!-- `OrderDetails`
     id (Primary Key)
     order_id (Foreign key referencing Orders)
     dish_id (Foreign key referencing Dishes)
@@ -88,7 +94,7 @@
     voucher_id (Foreign key referencing Vouchers)
     quantity
     price
-    note
+    note -->
 
 <!-- `Reviews`
     id (Primary Key)
@@ -107,6 +113,7 @@
   - conditions
   - quantity
    -->
+![sus-img](<image/Entity Diagram.jpg>)
 
 # how to create api
 - make migration: `php artisan make:migration create_reviews_table`
